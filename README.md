@@ -41,6 +41,14 @@ BEFORE YOU START CODING:
 1. make a dummy db with correct format
 2. before making each method make sure what format goes in and out
 3. dont forget to make code for when data is wrong, unavailable, or already present in db
+4. coding flow : db -> main -> router -> view -> repo
+
+delete is 204
+get is 200
+not found is 404
+input not complete is 400
+post is 201
+failed login 401
 
 
 <!-- 

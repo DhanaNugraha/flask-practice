@@ -1,5 +1,4 @@
 from flask import Blueprint, request
-
 from views.user import get_users, register_user
 
 
@@ -15,6 +14,13 @@ def user_api():
         case "post":
             return register_user(request.json)
         
-@user_router.route("/<user_email>", methods=["GET"])
+@user_router.route("/email/<user_email>", methods=["GET"])
 def get_user_by_email(user_email):
     return get_users(user_email)
+
+# @user_router.route("/id/<user_id>", methods=["GET"])
+# def get_user_by_id(user_id):
+#     print("herewwadwd")
+#     print(user_id)
+#     print(type(user_id))
+#     return get_users(user_id)

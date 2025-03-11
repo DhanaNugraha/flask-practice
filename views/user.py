@@ -1,24 +1,22 @@
 from flask import jsonify
-
 from repo.user import register_user_repository
+from repo.universal import all_users_repository
 
-from models.user import dummy_db
-
+def serialize_user(user_data):
+    return {
+        "email": user_data["email"],
+        "full_name": user_data["full_name"],
+    }
 
 def get_users(user_email=False):
-    users = dummy_db["users"]
+    users = all_users_repository()
     filtered_db = []
-    print(users)
 
     # for specific user
     if user_email:
         for id, user_data in users.items():
             if user_data["email"] == user_email:
-                filtered_user_data = {
-                    "email": user_data["email"],
-                    "full_name": user_data["full_name"],
-                }
-                filtered_db.append(filtered_user_data)
+                filtered_db.append(serialize_user(user_data))
 
         # when user not found
         if filtered_db == []:
@@ -32,11 +30,7 @@ def get_users(user_email=False):
     # for all user
     else:
         for id, user_data in users.items():
-            filtered_user_data = {
-                "email": user_data["email"],
-                "full_name": user_data["full_name"],
-            }
-            filtered_db.append(filtered_user_data)
+            filtered_db.append(serialize_user(user_data))
 
     return jsonify({"data": filtered_db, "success": True}), 200
 
@@ -69,7 +63,7 @@ def register_user(user_data):
 
     # check for duplicate in db
     # dont loop db directly, create a copy
-    users = dummy_db["users"]
+    users = all_users_repository()
     for id, registered_user in users.items():
         if registered_user["full_name"] == full_name or registered_user["email"] == email :
             return jsonify(
@@ -88,9 +82,7 @@ def register_user(user_data):
     # register user
     register_user_repository(user_id, user_data)
 
-    print(dummy_db)
-
-    # print(dummy_db)
+    # print(all_users_repository())
     return jsonify(
         {"data": {"message": f"{full_name} registered successfully!"}, "success": True}
     ), 201
